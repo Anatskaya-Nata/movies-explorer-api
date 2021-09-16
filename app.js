@@ -2,6 +2,7 @@ const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose');
 const { errors } = require('celebrate');
+const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const auth = require('./middlewares/auth');
 
@@ -38,6 +39,16 @@ app.post('/signup', validateSignUpBody, createUser);
 app.use(auth);
 app.use('/', rootRouter);
 
+const corsOptions = {
+  origin: [
+    'http://movies.diploma.nomoredomains.monster',
+    'https://movies.diploma.nomoredomains.monster',
+    'http://localhost:3001',
+  ],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(errorLogger);
 
 mongoose.connect('mongodb://localhost:27017/moviesdb', {
