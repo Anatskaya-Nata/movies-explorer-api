@@ -17,7 +17,7 @@ const receiveUser = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const {
-    name, about, avatar, email, password,
+    name, email, password,
   } = req.body;
 
   return User.findOne({ email })
@@ -29,8 +29,6 @@ const createUser = (req, res, next) => {
           .then((hash) => {
             User.create({
               name,
-              about,
-              avatar,
               email,
               password: hash,
             })
@@ -39,7 +37,7 @@ const createUser = (req, res, next) => {
                   data:
 
                   {
-                    name, avatar, about, email,
+                    name, email,
                   },
 
                 },
@@ -90,13 +88,13 @@ const login = (req, res, next) => {
 };
 
 const updateUser = (req, res, next) => {
-  const { name, about } = req.body;
+  const { name, email } = req.body;
 
   User.findByIdAndUpdate(
     req.user._id,
     {
       name,
-      about,
+      email,
     },
     {
       new: true,
