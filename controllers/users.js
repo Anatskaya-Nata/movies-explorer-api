@@ -107,7 +107,7 @@ const updateUser = (req, res, next) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError400({ message: 'Переданы некорректные данные пользователя' }));
       } else {
-        next(err);
+        next(new ConflictAccess409({ message: 'Пользователь с такими данными уже существует' }));
       }
     })
     .catch(next);

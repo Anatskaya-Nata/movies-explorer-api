@@ -8,7 +8,7 @@ const auth = (req, res, next) => {
   // console.log('authorization', authorization);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new AccessError401('Необходима авторизация');
+    throw new AccessError401({ message: 'Необходима авторизация' });
   }
   // извлечём токен
   const token = authorization.replace('Bearer ', '');
@@ -19,8 +19,9 @@ const auth = (req, res, next) => {
     payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
     // отправим ошибку, если не получилось
-    throw new AccessError401('Авторизация не прошла');
+    throw (new AccessError401({ message: 'Авторизация не прошла' }));
   }
+
   req.user = payload; // записываем пейлоуд в объект запроса
   next(); // пропускаем запрос дальше
 };

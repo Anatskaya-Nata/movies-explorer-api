@@ -1,6 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-
-const regex = /(https?:\/\/)(w{3}\.)?(((\d{1,3}\.){3}\d{1,3})|((\w-?)+\.(\w{2,})))((\/.+)+)?\/?#?/;
+const validator = require('validator');
 
 const validateUserBody = celebrate({
   body: Joi.object().keys({
@@ -17,11 +16,26 @@ const validateMovieBody = celebrate({
     year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().required().min(2)
-      .pattern(regex),
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле "image" должно быть валидным url-адресом');
+      }),
     trailer: Joi.string().required().min(2)
-      .pattern(regex),
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле "trailer" должно быть валидным url-адресом');
+      }),
     thumbnail: Joi.string().required().min(2)
-      .pattern(regex),
+      .custom((value, helpers) => {
+        if (validator.isURL(value)) {
+          return value;
+        }
+        return helpers.message('Поле "thumbnail" должно быть валидным url-адресом');
+      }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     movieId: Joi.number().required(),
@@ -43,7 +57,7 @@ const validateSignInBody = celebrate({
 
 const validateSignUpBody = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
     email: Joi.string().required().email(),
     password: Joi.string().required(),
   }),

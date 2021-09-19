@@ -4,28 +4,18 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const cors = require('cors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const auth = require('./middlewares/auth');
-
+const rootRouter = require('./routers');
 const {
-  login,
-  createUser,
-} = require('./controllers/users');
+  PORT_NUMBER,
+  MONGO_URL,
+  mongooseOptions,
+  corsOptions,
+} = require('./config/constants/constants');
 
-const {
-  validateSignInBody,
-  validateSignUpBody,
-
-} = require('./middlewares/validation');
-
-const { PORT = 3000 } = process.env;
+const { PORT = PORT_NUMBER } = process.env;
 
 const app = express();
-
-app.use(express.json());
-
-const rootRouter = require('./routers');
-
-app.use(requestLogger);
+mongoose.connect(MONGO_URL, mongooseOptions);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -33,33 +23,13 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', validateSignInBody, login);
-
-app.post('/signup', validateSignUpBody, createUser);
-app.use(auth);
+app.use(express.json());
+app.use(requestLogger);
 app.use('/', rootRouter);
-
-const corsOptions = {
-  origin: [
-    'http://movies.diploma.nomoredomains.monster',
-    'https://movies.diploma.nomoredomains.monster',
-    'http://localhost:3001',
-  ],
-  credentials: true,
-};
-
+app.use('/', rootRouter);
 app.use(cors(corsOptions));
 app.use(errorLogger);
-
-mongoose.connect('mongodb://localhost:27017/moviesdb', {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useFindAndModify: false,
-  useUnifiedTopology: true,
-});
-
 app.use(errors());
-
 app.use((err, req, res, next) => {
   const { status = 500, message } = err;
 
