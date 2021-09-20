@@ -44,7 +44,9 @@ const createUser = (req, res, next) => {
               ))
               .catch((err) => {
                 if (err.name === 'ValidationError') {
-                  throw new BadRequestError400({ message: 'Переданы некорректные данные пользователя' });
+                  next(new BadRequestError400({ message: 'Переданы некорректные данные пользователя' }));
+                } else if (err.code === 11000) {
+                  next(new ConflictAccess409({ message: 'Пользователь с такими данными уже существует' }));
                 } else {
                   next(err);
                 }

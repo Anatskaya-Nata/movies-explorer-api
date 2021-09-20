@@ -26,7 +26,6 @@ app.get('/crash-test', () => {
 app.use(express.json());
 app.use(requestLogger);
 app.use('/', rootRouter);
-app.use('/', rootRouter);
 app.use(cors(corsOptions));
 app.use(errorLogger);
 app.use(errors());
