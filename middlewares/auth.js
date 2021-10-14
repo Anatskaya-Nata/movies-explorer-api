@@ -5,10 +5,10 @@ const AccessError401 = require('../errors/AccessError401');
 
 const auth = (req, res, next) => {
   const { authorization } = req.headers;
-  // console.log('authorization', authorization);
+  console.log('authorization', authorization);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    throw new AccessError401({ message: 'Необходима авторизация' });
+    throw new AccessError401({ message: 'Необходима авторизация12' });
   }
   // извлечём токен
   const token = authorization.replace('Bearer ', '');
