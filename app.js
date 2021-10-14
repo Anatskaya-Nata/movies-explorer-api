@@ -22,11 +22,10 @@ app.get('/crash-test', () => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
-
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(requestLogger);
 app.use('/', rootRouter);
-app.use(cors(corsOptions));
 app.use(errorLogger);
 app.use(errors());
 app.use((err, req, res, next) => {
