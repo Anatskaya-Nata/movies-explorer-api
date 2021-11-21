@@ -11,7 +11,7 @@ const mongooseOptions = {
 
 const corsOptions = {
   origin: [
-    'http://movies.diploma.nomoredomains.monster',
+    // 'http://movies.diploma.nomoredomains.monster',
     'https://movies.diploma.nomoredomains.monster',
     'http://localhost:3000',
   ],
