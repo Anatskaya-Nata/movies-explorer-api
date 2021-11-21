@@ -5,7 +5,7 @@ import cors from 'cors';
 import { requestLogger, errorLogger } from './middlewares/logger';
 import rootRouter from './routers';
 import {
-  // PORT_NUMBER,
+  PORT_NUMBER,
   MONGO_URL,
   mongooseOptions,
   corsOptions,
@@ -13,8 +13,8 @@ import {
 
 require('dotenv').config();
 
-// const { PORT = PORT_NUMBER } = process.env;
-const { PORT = 3001 } = process.env;
+const { PORT = PORT_NUMBER } = process.env;
+// const { PORT = 3001 } = process.env;
 
 const app = express();
 connect(MONGO_URL, mongooseOptions);
