@@ -12,6 +12,7 @@ const receiveUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(() => new NotFoundError404({ message: 'Пользователь с такими данными не зарегестрирован' }))
     .then((user) => res.send({ data: user }))
+    // .then((user) => res.send({ user }))
     .catch(next);
 };
 
@@ -34,13 +35,9 @@ const createUser = (req, res, next) => {
             })
               .then(() => res.send(
                 {
-                  data:
-
-                  {
-                    name, email,
-                  },
-
+                  name, email,
                 },
+
               ))
               .catch((err) => {
                 if (err.name === 'ValidationError') {
